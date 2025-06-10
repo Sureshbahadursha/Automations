@@ -124,7 +124,7 @@ messageObject.attach(image1)
 
 html1 = "<!DOCTYPE html><html><head> <style> table{border-collapse: collapse;}td,th { border: 1px solid; padding: 4px; border-collapse: collapse;}</style> </head><body> <p style='font-size:100%;'>Hi All,</br>Please find below the status of application</p><table cellpadding='0' cellspacing='0'><tr><th style='background-color:#b3ccff'>Application</th><th style='background-color:#b3ccff'>Task</th><th style='background-color:#b3ccff'>Status</th><th style='background-color:#b3ccff;width:15%;'>Screenshot</th><th style='background-color:#b3ccff'>Comments</th></tr><tr><td>Lithium/Khoros</td><td>1.##########</br> 2.##########</br>3.##########</br>4.##########</td><td style='background-color:"+h+"'></td><td><img src="+"Screenshot.png"+" alt="+"Status Screenshot"+"></br>*Screenshot attached to mail</td><td>"+extracted_large_text+"</td></tr></table></body></html>"
 
-img= html1+'<p>Thanks & Regards
+img= html1+'<p>Thanks & Regards,</p><p>Suresh Bahadursha</p>'
 
 msgText = MIMEText(img, 'html')
     
