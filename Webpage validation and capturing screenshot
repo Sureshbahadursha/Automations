@@ -1,0 +1,145 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import datetime
+from selenium.webdriver.support.color import Color
+import requests
+from bs4 import BeautifulSoup
+from email import message
+from email.mime.multipart import MIMEMultipart
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
+import os
+from os import path
+import smtplib
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+import time
+
+################### Capturing Screenshot Segment-1
+try:
+    service = Service(executable_path='##path of the chrome driver')
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(service=service, options=options)
+    #driver = webdriver.Chrome(options=options)
+
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+driver.maximize_window()
+driver.get("###URL of the webpage")
+time.sleep(10)
+width=1920
+height= driver.execute_script("return Math.max(document.body.scrollHeight,document.body.offsetHeight,document.documentElement.clientHeight,document.documentElement.scrollHeight,document.documentElement.offsetHeight);")
+driver.set_window_size(width,height)
+page_body = driver.find_element(By.TAG_NAME,"body")
+page_body.screenshot("fullpage.png")
+
+print("Screenshot Captured and saved as fullpage.png")
+
+############################Inspecting CSS Segment-2
+Green_Error=0
+Yellow_Error=0
+try:
+    rgb= driver.find_element(By.CSS_SELECTOR, '[class="page-status status-none"]')
+    bg=rgb.value_of_css_property("background-color")
+    BGC_Green=Color.from_string(bg).hex
+    h=str(BGC_Green)
+except Exception as e:
+    print(f"An error occurred: {e}")
+    Green_Error=1
+    
+if Green_Error==1:
+    try:
+        rgb= driver.find_element(By.CSS_SELECTOR, '[class="incident-title font-large"]')
+        bg=rgb.value_of_css_property("background-color")
+        BGC_Yellow=Color.from_string(bg).hex
+        h=str(BGC_Yellow)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        Yellow_Error=1
+        h='#e67e22'
+    
+print("Inspected BG")
+
+driver.quit()
+
+###########################Inspecting HTML Segment-3
+url = '###URL of the webpage'
+try:
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        Body_code=soup.prettify()
+        if h=='#2ecc71':
+            text=soup.find('div' , class_ ='page-status status-none')
+            large_text=soup.find('span' , class_ ='status font-large')
+            
+        elif h=='#f1c40f':
+            text=soup.find('div' , class_ ='incident-title font-large')
+            large_text=soup.find('a' , class_ ='whitespace-pre-wrap actual-title with-ellipsis')
+        else:
+            large_text='>NA<'
+        def extract_text(input_string):
+            start_index = input_string.find('>')
+            end_index = input_string.rfind('<')
+            if start_index != -1 and end_index != -1:
+                return str(input_string[start_index + 1: end_index])
+            else:
+                return ""
+        large_text = str(large_text)
+        extracted_large_text = str(extract_text(large_text))
+        print("Large font:",extracted_large_text)
+
+    else:
+        print(f"Failed to retrieve content. Status code: {response.status_code}")
+except Exception as e:
+    print(f"An error occurred: {e}")
+
+###############################Capturing Date Segment-4
+current_datetime = datetime.datetime.now()
+formatted_date = current_datetime.strftime("%m-%d-%Y")
+print("Date Extracted and Formatted:", formatted_date)
+
+
+###############################Outlook mail Segment -5
+messageObject = MIMEMultipart()
+fromEmail = ''
+toEmail = ''
+cc = ''
+
+
+    
+messageObject['From'] = fromEmail
+messageObject['To'] = ', '.join(toEmail)
+messageObject['Cc'] = ', '.join(cc)
+messageObject['Subject'] = "validation-"+formatted_date+""
+
+with open('fullpage.png', 'rb') as img:
+   img_data1 = img.read() 
+
+image1 = MIMEImage(img_data1, name = os.path.basename('fullpage.png')) 
+
+messageObject.attach(image1)
+
+html1 = "<!DOCTYPE html><html><head> <style> table{border-collapse: collapse;}td,th { border: 1px solid; padding: 4px; border-collapse: collapse;}</style> </head><body> <p style='font-size:100%;'>Hi All,</br>Please find below the status of application</p><table cellpadding='0' cellspacing='0'><tr><th style='background-color:#b3ccff'>Application</th><th style='background-color:#b3ccff'>Task</th><th style='background-color:#b3ccff'>Status</th><th style='background-color:#b3ccff;width:15%;'>Screenshot</th><th style='background-color:#b3ccff'>Comments</th></tr><tr><td>Lithium/Khoros</td><td>1.Login to Lithium Console.</br> 2.Check status of Khoros platform.</br>3.AAAM automation email triggered.</br>4.Dynatrace health for Lithium/Khoros probe.</td><td style='background-color:"+h+"'></td><td><img src="+"Screenshot.png"+" alt="+"Status Screenshot"+"></br>*Screenshot attached to mail</td><td>"+extracted_large_text+"</td></tr></table></body></html>"
+
+img= html1+'<p>Thanks & Regards,</p><p>BBCC-SAAS Support Team.</p>'
+
+msgText = MIMEText(img, 'html')
+    
+messageObject.attach(msgText)
+   
+   
+try:
+    server  = smtplib.SMTP('mail10.bestbuy.com')
+    server.ehlo()
+    server.sendmail(fromEmail,(toEmail+cc),messageObject.as_string())
+    server.close()
+except Exception as e:
+    print(e)
+
+
+print("mail sent")
+
+
