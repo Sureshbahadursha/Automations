@@ -3,21 +3,19 @@ Welcome to the Automations Repository!
 
 This repository contains the source code for various automation scripts and tools I've developed and implemented over the last two years within my organization. The purpose of these automations is to streamline repetitive tasks, improve workflow efficiency, and reduce manual effort across different teams.
 
-Overview: 
-
 This repository includes a wide variety of automation scripts, such as:
 
-Task scheduling
+1.Task scheduling
 
-Data extraction and processing
+2.Data extraction and processing
 
-Reporting and notifications
+3.Reporting and notifications
 
-Integration with external tools and services
+4.Integration with external tools and services
 
-Batch processing
+5.Batch processing
 
-System monitoring and alerts
+6.System monitoring and alerts
 
 Each automation is designed to simplify processes, enhance productivity, and ensure consistent results, while eliminating human error in recurring tasks.
 
