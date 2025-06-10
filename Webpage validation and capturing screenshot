@@ -122,9 +122,9 @@ image1 = MIMEImage(img_data1, name = os.path.basename('fullpage.png'))
 
 messageObject.attach(image1)
 
-html1 = "<!DOCTYPE html><html><head> <style> table{border-collapse: collapse;}td,th { border: 1px solid; padding: 4px; border-collapse: collapse;}</style> </head><body> <p style='font-size:100%;'>Hi All,</br>Please find below the status of application</p><table cellpadding='0' cellspacing='0'><tr><th style='background-color:#b3ccff'>Application</th><th style='background-color:#b3ccff'>Task</th><th style='background-color:#b3ccff'>Status</th><th style='background-color:#b3ccff;width:15%;'>Screenshot</th><th style='background-color:#b3ccff'>Comments</th></tr><tr><td>Lithium/Khoros</td><td>1.Login to Lithium Console.</br> 2.Check status of Khoros platform.</br>3.AAAM automation email triggered.</br>4.Dynatrace health for Lithium/Khoros probe.</td><td style='background-color:"+h+"'></td><td><img src="+"Screenshot.png"+" alt="+"Status Screenshot"+"></br>*Screenshot attached to mail</td><td>"+extracted_large_text+"</td></tr></table></body></html>"
+html1 = "<!DOCTYPE html><html><head> <style> table{border-collapse: collapse;}td,th { border: 1px solid; padding: 4px; border-collapse: collapse;}</style> </head><body> <p style='font-size:100%;'>Hi All,</br>Please find below the status of application</p><table cellpadding='0' cellspacing='0'><tr><th style='background-color:#b3ccff'>Application</th><th style='background-color:#b3ccff'>Task</th><th style='background-color:#b3ccff'>Status</th><th style='background-color:#b3ccff;width:15%;'>Screenshot</th><th style='background-color:#b3ccff'>Comments</th></tr><tr><td>Lithium/Khoros</td><td>1.##########</br> 2.##########</br>3.##########</br>4.##########</td><td style='background-color:"+h+"'></td><td><img src="+"Screenshot.png"+" alt="+"Status Screenshot"+"></br>*Screenshot attached to mail</td><td>"+extracted_large_text+"</td></tr></table></body></html>"
 
-img= html1+'<p>Thanks & Regards,</p><p>BBCC-SAAS Support Team.</p>'
+img= html1+'<p>Thanks & Regards
 
 msgText = MIMEText(img, 'html')
     
@@ -132,7 +132,7 @@ messageObject.attach(msgText)
    
    
 try:
-    server  = smtplib.SMTP('mail10.bestbuy.com')
+    server  = smtplib.SMTP('###smtpserver')
     server.ehlo()
     server.sendmail(fromEmail,(toEmail+cc),messageObject.as_string())
     server.close()
