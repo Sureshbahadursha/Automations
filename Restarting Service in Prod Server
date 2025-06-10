@@ -3,12 +3,11 @@ import logging
 
 ##################cyberark login needed for creds
 
-server ="172.18.161.196" #- DT
-#"172.18.81.15" - prod 
-username = "A1446991-A"  
+server ="" #- Dev
+username = ""  
 password = ""  
-#service_name = "ClosePendingCompleteOrderService"
-service_name = "ProfSvc"
+service_name = ""
+
 flag=0
 
 logging.info("Establishing a cmd remoting session")
