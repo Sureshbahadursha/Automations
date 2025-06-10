@@ -18,7 +18,7 @@ print("Date Extracted and Formatted:", current_date)
 
 ############################### Validating Star Reports Segment-2
 
-star_reports_path = Path(r"\\bnacorp01sf\star_actuate_reporting\Service Center Management Reports\Service Accounting\GL Activity\Daily")
+star_reports_path = Path(r"#######File path####")
 star_reports_flag=['Failure','Success']
 flag=0
 bg='#FF0000'  
@@ -36,7 +36,7 @@ if str(star_reports_date.date()) == str(current_date):
 
 ############################### Validating Inbound Files ( VRI , VSU, INV ) Segment-3
 
-Inbound_path = Path(r"\\pdw01k02ap01a\bbyapps\bby-repl-data\Delete")
+Inbound_path = Path(r"#######File path####")
 
 Inbound_path_file_names=['VSU', 'VRI', 'RGM', 'INV']
 Inbound_path_files=list(Inbound_path.iterdir())
@@ -54,7 +54,7 @@ for Inbound_path_file in Inbound_path_files:
 
 ############################### Validating Outbound Files (RGM ) Segment-4
         
-Outbound_path = Path(r"\\pdw01k02ap01a\bbyapps\bby-repl-data\Export\Archive")
+Outbound_path = Path(r"#######File path####")
 Outbound_path_files=list(Outbound_path.iterdir())
 Outbound_path_files = Outbound_path_files[::-1]
 Outbound_path_file_names=['RGM']
@@ -72,21 +72,21 @@ for Outbound_path_file in Outbound_path_files:
 
 ###############################Outlook mail Segment -5
 messageObject = MIMEMultipart()
-fromEmail = ['A3048773@bestbuy.com']
-toEmail = ['A3048773@bestbuy.com']
-cc = ['A3048773@bestbuy.com']
+fromEmail = ''
+toEmail = ''
+cc = ''
     
 messageObject['From'] = fromEmail
 messageObject['To'] = ', '.join(toEmail)
 messageObject['Cc'] = ', '.join(cc)
-messageObject['Subject'] = "IMP MONITORING STATUS "+current_date+" "
+messageObject['Subject'] = "MONITORING STATUS "+current_date+" "
 messageObject['X-Priority'] = '2'
 
 
 html1 = "<!DOCTYPE html><html><head><style>table{border-collapse: collapse;}td,th{border: 1px solid; padding: 4px; border-collapse: collapse;}</style></head><body><p style='font-size:100%;'>Hi All,</br>Since the flow stopped and Job is not processing any records, hence we are removing the K02ND104 job stream from the monitoring sheet.</br>Please find the monitoring status :</br>Evening Monitoring</p><table cellpadding='0' cellspacing='0'><tr><th style='background-color:#b3ccff'>Description</th><th style='background-color:#b3ccff'>Status</th></tr><tr><td>STAR Reports</td><td style='background-color:"+bg+"'>"+star_reports_flag[flag]+"</td></tr><tr><td>Files sent to NP</td><td>Inbound (last received):</br>VSU :"+Inbound_path_file_updated_dates['VSU']+" </br>INV :"+Inbound_path_file_updated_dates['INV']+" </br>RGM :"+Outbound_path_file_updated_dates['RGM']+" </br></td></tr><tr><td>VRI files monitoring</td><td>VRI :"+Inbound_path_file_updated_dates['VRI']+" </td></td></table></body></html>"
 
 
-img=html1+'<p>Thanks & Regards,</p><p>Thanks and Regards STAR ASM</p>'
+img=html1+'<p>Thanks & Regards,</p><p>Suresh Bahadursha</p>'
 
 msgText = MIMEText(img, 'html')
     
@@ -94,7 +94,7 @@ messageObject.attach(msgText)
    
    
 try:
-    server  = smtplib.SMTP('mail10.bestbuy.com')
+    server  = smtplib.SMTP('#######smtpserver###')
     server.ehlo()
     server.sendmail(fromEmail,(toEmail+cc),messageObject.as_string())
     server.close()
